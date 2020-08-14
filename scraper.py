@@ -5,11 +5,11 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 
-VILLAGERS_CSV = "villagers.csv"
-BUGS_CSV = "bugs.csv"
-FISH_CSV = "fish.csv"
-SEACREATURES_CSV = "seacreatures.csv"
-ART_CSV = "art.csv"
+VILLAGERS_CSV = "CSV/villagers.csv"
+BUGS_CSV = "CSV/bugs.csv"
+FISH_CSV = "CSV/fish.csv"
+SEACREATURES_CSV = "CSV/seacreatures.csv"
+ART_CSV = "CSV/art.csv"
 
 COMMA = ','
 NEWLINE = '\n'

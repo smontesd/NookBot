@@ -3,11 +3,12 @@
 # Email: deocapaul@gmail.com
 
 import csv
+import discord
 from discord.ext import commands
 
 # Constants
 BOT_PREFIX = '!'
-BOT_TOKEN = 'BOT TOKEN HERE'
+BOT_TOKEN = 'NzQyODQyMTM0MzA1OTY0MDYz.XzL_pg.vOMLfoTWvW2axi0mx6MX9OUcRaM'
 VILLAGERS_CSV = 'CSV/villagers.csv'
 FISH_CSV = 'CSV/fish.csv'
 SEACREATURES_CSV = 'CSV/seacreatures.csv'
@@ -75,11 +76,15 @@ async def get_villager(ctx, arg):
         if arg.lower() != villager['name'].lower():
             continue
 
-        await ctx.send('Name: ' + villager['name'])
-        await ctx.send(villager['photo_url'])
-        await ctx.send('Species: ' + villager['species'])
-        await ctx.send('Personality: ' + villager['personality'])
-        await ctx.send('Catch phrase: "' + villager['catch_phrase'] + '"')
+        embedVar = discord.Embed(title=villager['name'])
+        embedVar.set_image(url=villager['photo_url'])
+        embedVar.add_field(name='Species',
+                           value=villager['species'], inline=True)
+        embedVar.add_field(name='Personality',
+                           value=villager['personality'], inline=True)
+        embedVar.add_field(name='Catch phrase',
+                           value=villager['catch_phrase'], inline=True)
+        await ctx.send(embed=embedVar)
         return
 
     await ctx.send(NOT_FOUND)
@@ -97,15 +102,15 @@ async def get_art(ctx, arg):
         if arg.lower() != art['name'].lower():
             continue
 
-        await ctx.send('Name: ' + art['name'])
-        if art['forgery'] == 'N/A':
-            await ctx.send('Forgery: N/A')
-        else:
-            await ctx.send('Forgery:')
-            await ctx.send(art['forgery'])
+        embedForgery = discord.Embed(title=art['name'], description='Forgery')
+        embedGenuine = discord.Embed(title=art['name'], description='Genuine')
 
-        await ctx.send('Genuine:')
-        await ctx.send(art['genuine'])
+        if art['forgery'] != 'N/A':
+            embedForgery.set_image(url=art['forgery'])
+            await ctx.send(embed=embedForgery)
+
+        embedGenuine.set_image(url=art['genuine'])
+        await ctx.send(embed=embedGenuine)
         return
 
     await ctx.send(NOT_FOUND)
@@ -123,9 +128,10 @@ async def get_seacreature(ctx, arg):
         if arg.lower() != seacreature['name'].lower():
             continue
 
-        await ctx.send('Name: ' + seacreature['name'])
-        await ctx.send(seacreature['image'])
-        await ctx.send('Price: ' + seacreature['price'])
+        embedVar = discord.Embed(title=seacreature['name'],
+                                 description=('Price: ' + seacreature['price']))
+        embedVar.set_thumbnail(url=seacreature['image'])
+        await ctx.send(embed=embedVar)
         return
 
     await ctx.send(NOT_FOUND)
@@ -143,10 +149,11 @@ async def get_bug(ctx, arg):
         if arg.lower() != bug['name'].lower():
             continue
 
-        await ctx.send('Name: ' + bug['name'])
-        await ctx.send(bug['image'])
-        await ctx.send('Price: ' + bug['price'])
-        await ctx.send('Location: ' + bug['location'])
+        embedVar = discord.Embed(title=bug['name'],
+                                 description=('Price: ' + bug['price']))
+        embedVar.add_field(name='Location', value=bug['location'])
+        embedVar.set_thumbnail(url=bug['image'])
+        await ctx.send(embed=embedVar)
         return
 
     await ctx.send(NOT_FOUND)
@@ -164,10 +171,11 @@ async def get_fish(ctx, arg):
         if arg.lower() != fish['name'].lower():
             continue
 
-        await ctx.send('Name: ' + fish['name'])
-        await ctx.send(fish['image'])
-        await ctx.send('Price: ' + fish['price'])
-        await ctx.send('Location: ' + fish['location'])
+        embedVar = discord.Embed(title=fish['name'],
+                                 description=('Price: ' + fish['price']))
+        embedVar.add_field(name='Location', value=fish['location'])
+        embedVar.set_thumbnail(url=fish['image'])
+        await ctx.send(embed=embedVar)
         return
 
     await ctx.send(NOT_FOUND)

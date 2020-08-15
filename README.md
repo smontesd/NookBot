@@ -14,4 +14,3 @@ There are 5 commands in total:
 
 Note:  
 Make sure to place each argument within quotes
-Capilize the first letter and leave the rest in lower case

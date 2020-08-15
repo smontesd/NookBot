@@ -7,7 +7,7 @@ from discord.ext import commands
 
 # Constants
 BOT_PREFIX = '!'
-BOT_TOKEN = 'TOKEN GOES HERE'
+BOT_TOKEN = 'BOT TOKEN HERE'
 VILLAGERS_CSV = 'CSV/villagers.csv'
 FISH_CSV = 'CSV/fish.csv'
 SEACREATURES_CSV = 'CSV/seacreatures.csv'
@@ -72,7 +72,7 @@ async def get_villager(ctx, arg):
         return
 
     for villager in villagers:
-        if arg != villager['name']:
+        if arg.lower() != villager['name'].lower():
             continue
 
         await ctx.send('Name: ' + villager['name'])
@@ -94,7 +94,7 @@ async def get_art(ctx, arg):
         return
 
     for art in artwork:
-        if arg != art['name']:
+        if arg.lower() != art['name'].lower():
             continue
 
         await ctx.send('Name: ' + art['name'])
@@ -120,7 +120,7 @@ async def get_seacreature(ctx, arg):
         return
 
     for seacreature in seacreatures:
-        if arg != seacreature['name']:
+        if arg.lower() != seacreature['name'].lower():
             continue
 
         await ctx.send('Name: ' + seacreature['name'])
@@ -140,7 +140,7 @@ async def get_bug(ctx, arg):
         return
 
     for bug in bugs:
-        if arg != bug['name']:
+        if arg.lower() != bug['name'].lower():
             continue
 
         await ctx.send('Name: ' + bug['name'])
@@ -161,7 +161,7 @@ async def get_fish(ctx, arg):
         return
 
     for fish in fishes:
-        if arg != fish['name']:
+        if arg.lower() != fish['name'].lower():
             continue
 
         await ctx.send('Name: ' + fish['name'])

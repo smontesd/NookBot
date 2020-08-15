@@ -8,7 +8,7 @@ from discord.ext import commands
 
 # Constants
 BOT_PREFIX = '!'
-BOT_TOKEN = 'NzQyODQyMTM0MzA1OTY0MDYz.XzL_pg.vOMLfoTWvW2axi0mx6MX9OUcRaM'
+BOT_TOKEN = 'BOT TOKEN HERE'
 VILLAGERS_CSV = 'CSV/villagers.csv'
 FISH_CSV = 'CSV/fish.csv'
 SEACREATURES_CSV = 'CSV/seacreatures.csv'

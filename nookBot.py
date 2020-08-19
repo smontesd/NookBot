@@ -1,6 +1,6 @@
 # File Name: nookBot.py
 # Author: Stephen Montes De Oca
-# Email: deocapaul@gmail.com
+# Email: deocastephen@gmail.com
 
 import csv
 import discord
@@ -8,7 +8,7 @@ from discord.ext import commands
 
 # Constants
 BOT_PREFIX = '!'
-BOT_TOKEN = 'BOT TOKEN HERE'
+BOT_TOKEN = 'BOT TOKEN GOES HERE'
 VILLAGERS_CSV = 'CSV/villagers.csv'
 FISH_CSV = 'CSV/fish.csv'
 SEACREATURES_CSV = 'CSV/seacreatures.csv'

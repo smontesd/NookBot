@@ -1,6 +1,6 @@
 # File Name: scraper.py
 # Author: Stephen Montes De Oca
-# Email: deocapaul@gmail.com
+# Email: deocastephen@gmail.com
 
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup

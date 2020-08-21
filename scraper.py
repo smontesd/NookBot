@@ -57,6 +57,9 @@ def getVillagerList():
         species = contents[4].a.text
         catch_phrase = contents[6].i.text
 
+        # cleaning improperly formatted strings
+        catch_phrase = catch_phrase.strip()
+
         # writing to CSV file
         f.write(name + COMMA)
         f.write(photo_url + COMMA)

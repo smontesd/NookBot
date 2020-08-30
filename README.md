@@ -5,12 +5,13 @@ Discord Bot that outputs game data for Animal Crossing: New Horizons
 Discord.py
 
 # How to Use: Discord Bot
-There are 5 commands in total:
+There are 6 commands in total:
 1. !villager "Villager Name"
 2. !art "Artwork Name"
 3. !bug "Bug Name"
 4. !fish "Fish Name"
 5. !seacreature "Sea Creature Name"
+6. !list "Villagers"
 
-Note:  
-Make sure to place each argument within quotes
+Notes:  
+Space separated arguments must be contained within strings

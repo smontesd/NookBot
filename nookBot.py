@@ -4,11 +4,12 @@
 
 import csv
 import discord
+import math
 from discord.ext import commands
 
 # Constants
 BOT_PREFIX = '!'
-BOT_TOKEN = 'BOT TOKEN GOES HERE'
+BOT_TOKEN = 'BOT TOKEN HERE'
 VILLAGERS_CSV = 'CSV/villagers.csv'
 FISH_CSV = 'CSV/fish.csv'
 SEACREATURES_CSV = 'CSV/seacreatures.csv'
@@ -16,8 +17,9 @@ BUGS_CSV = 'CSV/bugs.csv'
 ART_CSV = 'CSV/art.csv'
 NONE_FOUND = 'Dictionary has not been initialized'
 NOT_FOUND = 'Request could not be found, perhaps check spelling'
+INVALID_LIST = 'Invalid request. List options are: villagers, artwork, fishes, bugs, seacreatures'
 
-# initialzing dictionaries
+# initialzing lists
 villagers = []
 artwork = []
 seacreatures = []
@@ -64,6 +66,7 @@ with open(FISH_CSV, 'r') as csvfile:
 bot = commands.Bot(command_prefix=BOT_PREFIX)
 
 
+# defining bot commands
 @bot.command(name="villager",
              description="Displays villager name, species, phrase, personality, and a photo",
              brief='Usage example: !villager "Tia"')
@@ -72,12 +75,15 @@ async def get_villager(ctx, arg):
         await ctx.send(NONE_FOUND)
         return
 
+    arg_lower = arg.lower()
+
     for villager in villagers:
-        if arg.lower() != villager['name'].lower():
+        if arg_lower != villager['name'].lower():
             continue
 
-        embedVar = discord.Embed(title=villager['name'])
-        embedVar.set_image(url=villager['photo_url'])
+        embedVar = discord.Embed(title=villager['name'],
+                                 colour=0xffb500)
+        embedVar.set_thumbnail(url=villager['photo_url'])
         embedVar.add_field(name='Species',
                            value=villager['species'], inline=True)
         embedVar.add_field(name='Personality',
@@ -98,19 +104,25 @@ async def get_art(ctx, arg):
         await ctx.send(NONE_FOUND)
         return
 
+    arg_lower = arg.lower()
+
     for art in artwork:
         if arg.lower() != art['name'].lower():
             continue
 
-        embedForgery = discord.Embed(title=art['name'], description='Forgery')
-        embedGenuine = discord.Embed(title=art['name'], description='Genuine')
+        embedForgery = discord.Embed(title=art['name'],
+                                     description='Forgery',
+                                     colour=0xff1b00)
+        embedGenuine = discord.Embed(title=art['name'],
+                                     description='Genuine',
+                                     colour=0x00ff00)
+
+        embedGenuine.set_thumbnail(url=art['genuine'])
+        await ctx.send(embed=embedGenuine)
 
         if art['forgery'] != 'N/A':
-            embedForgery.set_image(url=art['forgery'])
+            embedForgery.set_thumbnail(url=art['forgery'])
             await ctx.send(embed=embedForgery)
-
-        embedGenuine.set_image(url=art['genuine'])
-        await ctx.send(embed=embedGenuine)
         return
 
     await ctx.send(NOT_FOUND)
@@ -124,12 +136,16 @@ async def get_seacreature(ctx, arg):
         await ctx.send(NONE_FOUND)
         return
 
+    arg_lower = arg.lower()
+
     for seacreature in seacreatures:
-        if arg.lower() != seacreature['name'].lower():
+        if arg_lower != seacreature['name'].lower():
             continue
 
         embedVar = discord.Embed(title=seacreature['name'],
-                                 description=('Price: ' + seacreature['price']))
+                                 description=(
+                                     'Price: ' + seacreature['price']),
+                                 colour=0x0020ff)
         embedVar.set_thumbnail(url=seacreature['image'])
         await ctx.send(embed=embedVar)
         return
@@ -145,12 +161,15 @@ async def get_bug(ctx, arg):
         await ctx.send(NONE_FOUND)
         return
 
+    arg_lower = arg.lower()
+
     for bug in bugs:
-        if arg.lower() != bug['name'].lower():
+        if arg_lower != bug['name'].lower():
             continue
 
         embedVar = discord.Embed(title=bug['name'],
-                                 description=('Price: ' + bug['price']))
+                                 description=('Price: ' + bug['price']),
+                                 colour=0x059200)
         embedVar.add_field(name='Location', value=bug['location'])
         embedVar.set_thumbnail(url=bug['image'])
         await ctx.send(embed=embedVar)
@@ -167,12 +186,15 @@ async def get_fish(ctx, arg):
         await ctx.send(NONE_FOUND)
         return
 
+    arg_lower = arg.lower()
+
     for fish in fishes:
-        if arg.lower() != fish['name'].lower():
+        if arg_lower != fish['name'].lower():
             continue
 
         embedVar = discord.Embed(title=fish['name'],
-                                 description=('Price: ' + fish['price']))
+                                 description=('Price: ' + fish['price']),
+                                 colour=0x0095ff)
         embedVar.add_field(name='Location', value=fish['location'])
         embedVar.set_thumbnail(url=fish['image'])
         await ctx.send(embed=embedVar)
@@ -181,9 +203,130 @@ async def get_fish(ctx, arg):
     await ctx.send(NOT_FOUND)
 
 
-@bot.command(name="stop",
-             description="Terminates Nook Bot",
-             brief="Terminates Nook Bot")
+@bot.event
+async def on_reaction_add(reaction, user):
+    if reaction.emoji != '➡' and reaction.emoji != '⬅':
+        print("hello")
+        return
+
+    msg = reaction.message
+    contents = msg.content
+
+    # splitting message by new lines if in list format
+    entries = contents.split('\n')
+
+    if len(entries) <= 1:
+        return
+
+    # if in list format the first entry will specify which list is being used
+    first_entry = entries[0]
+    list_used = []
+    message = None
+
+    # checking which option to list
+    if (first_entry == 'Villagers'):
+        list_used = villagers
+        message = "Villagers\n"
+    elif (first_entry == 'Fishes'):
+        list_used = fishes
+        message = "Fishes\n"
+    elif (first_entry == 'Sea Creatures'):
+        list_used = seacreatures
+        message = "Sea Creatures\n"
+    elif (first_entry == 'Bugs'):
+        list_used = bugs
+        message = "Bugs\n"
+    elif (first_entry == 'Artwork'):
+        list_used = artwork
+        message = "Artwork\n"
+    else:
+        return
+
+    pageCount = math.ceil(len(list_used) / 25)
+    if (pageCount == 0):
+        return
+
+    # checking for page index
+    second_entry = entries[1]
+    second_entry = second_entry.split(".")
+    pageIndex = math.ceil(int(second_entry[0]) / 25)
+
+    if reaction.emoji == '➡':
+        pageIndex += 1
+    elif reaction.emoji == '⬅':
+        pageIndex -= 1
+
+    # checking if page index is valid
+    if pageIndex < 1 or pageIndex > pageCount:
+        return
+
+    # printing next page
+    start = (pageIndex - 1) * 25
+    end = pageIndex * 25
+
+    if pageIndex == pageCount:
+        end = len(list_used)
+
+    for i in range(start, end):
+        entry = list_used[i]
+        message += "{index}. {name}\n".format(
+            index=(i + 1), name=entry['name'])
+
+    await msg.edit(content=message)
+
+
+@ bot.command(name="list",
+              description="Outputs a list for a given category: art, bugs, fishes, seacreatures, villagers",
+              brief='Usage example: !list "villagers"')
+async def list(ctx, arg):
+    list_used = []
+    arg_lower = arg.lower()
+    message = None
+
+    # checking which option to list
+    if (arg_lower == 'villagers'):
+        list_used = villagers
+        message = "Villagers\n"
+    elif (arg_lower == 'fishes'):
+        list_used = fishes
+        message = "Fishes\n"
+    elif (arg_lower == 'seacreatures'):
+        list_used = seacreatures
+        message = "Sea Creatures\n"
+    elif (arg_lower == 'bugs'):
+        list_used = bugs
+        message = "Bugs\n"
+    elif (arg_lower == 'artwork'):
+        list_used = artwork
+        message = "Artwork\n"
+    else:
+        await ctx.send(INVALID_LIST)
+        return
+
+    count = len(list_used)
+    if (count == 0):
+        await ctx.send(NONE_FOUND)
+        return
+
+    msg = await ctx.send("Listing...")
+    await msg.add_reaction('⬅')
+    await msg.add_reaction('➡')
+
+    # generating list contents
+    if (count > 25):
+        count = 25
+
+    for i in range(count):
+        entry = list_used[i]
+        message += "{index}. {name}\n".format(index=(i + 1),
+                                              name=entry['name'])
+
+    await msg.edit(content=message)
+
+
+@ bot.command(name="stop",
+              description="Terminates Nook Bot",
+              brief="Terminates Nook Bot")
 async def log_out(ctx):
     await bot.logout()
 

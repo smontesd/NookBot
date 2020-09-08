@@ -248,6 +248,8 @@ def getArtList():
     for table in tables:
         table_contents = table.contents
 
+        dupe_count = 0
+        
         for i in range(3, len(table_contents), 2):
             art = table_contents[i]
             art_properties = art.contents
@@ -260,6 +262,12 @@ def getArtList():
                 forgery = art_properties[2].a['href']
             except:
                 forgery = NOT_AVAILAVLE
+
+            if name == "Wild painting":
+                if dupe_count == 0:
+                    name += "left"
+                else:
+                    name += "right"
 
             # writing to csv file
             f.write(name + COMMA)

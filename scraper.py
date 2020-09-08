@@ -265,9 +265,10 @@ def getArtList():
 
             if name == "Wild painting":
                 if dupe_count == 0:
-                    name += "left"
+                    name += " left"
+                    dupe_count += 1
                 else:
-                    name += "right"
+                    name += " right"
 
             # writing to csv file
             f.write(name + COMMA)

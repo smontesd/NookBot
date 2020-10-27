@@ -11,7 +11,7 @@ There are 6 commands in total:
 3. !bug "Bug Name"
 4. !fish "Fish Name"
 5. !seacreature "Sea Creature Name"
-6. !list "Villagers"
+6. !list "Category Name"
 
 Notes:  
 Space separated arguments must be contained within strings
